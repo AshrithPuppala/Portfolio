@@ -198,12 +198,6 @@
   .about-card p{color:var(--muted);font-size:0.95rem;}
   .about-copy p{color:var(--muted);font-size:1.02rem;margin-bottom:18px;}
   .about-copy strong{color:var(--text);font-weight:600;}
-  .highlight-badge{
-    display:inline-flex;align-items:center;gap:10px;
-    font-family:var(--font-mono);font-size:12px;color:var(--gold);
-    border:1px solid rgba(255,200,92,0.3);background:rgba(255,200,92,0.06);
-    padding:8px 14px;border-radius:20px;margin-top:6px;
-  }
 
   /* ---------- PROJECT CARDS ---------- */
   .project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
@@ -332,9 +326,46 @@
     *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
     html{scroll-behavior:auto;}
   }
+
+  /* ---------- CUSTOM GLASS-SLIDER CURSOR ---------- */
+  .has-custom-cursor, .has-custom-cursor *{cursor:none !important;}
+  #cursorDot, #cursorRing{
+    position:fixed;top:0;left:0;pointer-events:none;z-index:999;
+    transform:translate3d(-50%,-50%,0);will-change:transform,width,height,border-radius;
+  }
+  #cursorDot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 8px var(--cyan);
+  }
+  #cursorRing{
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(6px) saturate(160%);
+    -webkit-backdrop-filter:blur(6px) saturate(160%);
+    transition:width .28s cubic-bezier(.16,.8,.3,1), height .28s cubic-bezier(.16,.8,.3,1),
+               border-radius .28s cubic-bezier(.16,.8,.3,1), border-color .28s, background .28s;
+  }
+  /* hovering any interactive element: ring becomes a slider "track" pill */
+  #cursorRing.hover{
+    width:64px;height:26px;border-radius:20px;
+    border-color:var(--cyan-dim);
+    background:rgba(0,216,255,0.08);
+  }
+  /* actively dragging the hackathon slider: pill compresses, like a grabbed handle */
+  #cursorRing.drag{
+    width:46px;height:20px;border-radius:20px;
+    border-color:var(--cyan);
+    background:rgba(0,216,255,0.16);
+  }
+  #cursorRing.drag ~ #cursorDot, .cursor-dot-hide{opacity:0;}
 </style>
 </head>
 <body>
+
+<div id="cursorRing"></div>
+<div id="cursorDot"></div>
 
 <div class="scroll-meter" id="scrollMeter"></div>
 
@@ -378,8 +409,8 @@
     <div class="label">Festivals Directed — Transcendence & Phenomenon</div>
   </div>
   <div class="stat">
-    <div class="num">08 HR</div>
-    <div class="label">CTF Smash and Crack — Completed</div>
+    <div class="num">20K+</div>
+    <div class="label">Attendees — Phenomenon 2024, as Head of Events</div>
   </div>
 </section>
 
@@ -392,8 +423,7 @@
     <div class="about-copy">
       <p><strong>Ashrith Puppala</strong> is an Electronics and Communication Engineering student at <strong>PES University</strong>, Bengaluru — working across hardware sensor fusion, machine learning integration, and applied environmental research.</p>
       <p>Before university, he topped the <strong>ISC Science Stream</strong> at St. Joseph's Boys' High School with a <strong>98.2%</strong> board score. That same precision now shows up in multi-sensor systems that geotag potholes in real time and piezoelectric rigs that turn footsteps into usable current.</p>
-      <p>Off the breadboard: acrylic painter with work shown in public exhibitions, state-level badminton runner-up, and — by popular household vote — full-time favourite person of a dog named <strong>Bruno</strong>.</p>
-      <div class="highlight-badge">🐾 Bruno approves this portfolio</div>
+      <p>Off the breadboard: acrylic painter with work shown in public exhibitions, and a state-level badminton runner-up.</p>
     </div>
     <div>
       <div class="about-card">
@@ -432,9 +462,10 @@
     <div class="project-card">
       <div class="project-index">HW / 02</div>
       <h3>Footstep Power Generator</h3>
-      <p>A piezoelectric energy harvester that converts foot pressure into usable electrical current — demonstrated live to the Governor of Karnataka.</p>
+      <p>A piezoelectric energy harvester that converts foot pressure into usable current, with Arduino-based monitoring logging voltage spikes and storage efficiency in real time. Demonstrated live to the Governor of Karnataka.</p>
       <div class="chip-row">
         <span class="chip">Piezoelectric</span>
+        <span class="chip">Arduino Monitoring</span>
         <span class="chip">Kinetic Harvesting</span>
         <span class="chip">Clean Energy</span>
       </div>
@@ -485,14 +516,14 @@
       <div class="slide-card">
         <span class="rank silver">2nd Place · 2025</span>
         <h3>Syzygy 2.0 Space-Tech Hackathon</h3>
-        <p>Built a real-time space debris tracking platform under team "Triple A Battery" at Equinox, The Space Club PESU.</p>
+        <p>Built a real-time space debris tracking platform under team "Triple A Battery" — placed among 60+ teams at Equinox, The Space Club PESU.</p>
         <div class="meta">Team: Triple A Battery</div>
       </div>
 
       <div class="slide-card">
         <span class="rank bronze">3rd Place · 2025</span>
-        <h3>ML Hunt: Neural Hive</h3>
-        <p>Designed high-accuracy predictive models during Retronomia (Maaya 2025) at the PESU Electronic City Campus.</p>
+        <h3>Neurohive ML Hunt</h3>
+        <p>Recognised for performance in an ML-based treasure hunt among 35+ teams during Retronomia, MAAYA 2025, PES-EC.</p>
         <div class="meta">Machine Learning Sprint</div>
       </div>
 
@@ -533,9 +564,9 @@
 
       <div class="slide-card">
         <span class="rank neutral">2025</span>
-        <h3>CTF Smash and Crack</h3>
-        <p>An 8-hour cybersecurity Capture The Flag challenge hosted by the Alcoding Club, CSE Department.</p>
-        <div class="meta">8-Hour Cybersecurity CTF</div>
+        <h3>Hackoween</h3>
+        <p>Worked with the organising committee on ARCH (AI &amp; ML Club, PES RR) — event ideation and competition structure.</p>
+        <div class="meta">ARCH · Event Design</div>
       </div>
 
     </div>
@@ -595,14 +626,14 @@
   <div class="footer-top reveal">
     <h2>Let's build something that actually senses the world.</h2>
     <div class="footer-links">
-      <a href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://www.linkedin.com/in/ashrith-puppala-00343927b" target="_blank" rel="noopener">LinkedIn ↗</a>
       <a href="#" target="_blank" rel="noopener">Instagram ↗</a>
-      <a href="mailto:hello@ashrithpuppala.com">Email ↗</a>
+      <a href="mailto:ashrithpuppala07@gmail.com">Email ↗</a>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2026 Ashrith Puppala. Bengaluru, Karnataka.</span>
-    <span class="easter-egg">Built with sensors, caffeine &amp; Bruno's supervision 🐾</span>
+    <span>Designed &amp; built for the field, not the demo day.</span>
   </div>
 </footer>
 
@@ -625,6 +656,43 @@ const io = new IntersectionObserver((entries)=>{
   });
 },{threshold:0.15});
 reveals.forEach(r=>io.observe(r));
+
+/* ---------- CUSTOM GLASS-SLIDER CURSOR ---------- */
+(function(){
+  const isFinePointer = window.matchMedia('(pointer:fine)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!isFinePointer || reduceMotion) return;
+
+  document.documentElement.classList.add('has-custom-cursor');
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+
+  let mouseX=0, mouseY=0, ringX=0, ringY=0;
+  window.addEventListener('mousemove', (e)=>{
+    mouseX = e.clientX; mouseY = e.clientY;
+    dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+  });
+
+  function loop(){
+    ringX += (mouseX - ringX) * 0.18;
+    ringY += (mouseY - ringY) * 0.18;
+    ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  const hoverTargets = 'a, button, .btn, .slider-btn, .project-card, .slide-card, .lead-card, .about-card, .split-card, nav a';
+  document.querySelectorAll(hoverTargets).forEach(el=>{
+    el.addEventListener('mouseenter', ()=> ring.classList.add('hover'));
+    el.addEventListener('mouseleave', ()=> ring.classList.remove('hover'));
+  });
+
+  const track = document.getElementById('sliderTrack');
+  track.addEventListener('mouseenter', ()=> ring.classList.add('hover'));
+  track.addEventListener('mouseleave', ()=> ring.classList.remove('hover','drag'));
+  track.addEventListener('mousedown', ()=> ring.classList.add('drag'));
+  window.addEventListener('mouseup', ()=> ring.classList.remove('drag'));
+})();
 
 /* ---------- GLASS SLIDER CONTROLS ---------- */
 const track = document.getElementById('sliderTrack');
