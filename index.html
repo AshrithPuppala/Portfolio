@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashrith Puppala — ECE Engineer & Hardware Innovator</title>
+<meta name="description" content="Ashrith Puppala — ECE Student at PES University. Sensor fusion hardware, ML systems, and global hackathon finalist.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#090c12;
+    --bg-alt:#0d121a;
+    --surface:rgba(255,255,255,0.045);
+    --surface-strong:rgba(255,255,255,0.07);
+    --glass-border:rgba(255,255,255,0.09);
+    --text:#eaf0f6;
+    --muted:#8993a3;
+    --cyan:#00d8ff;
+    --cyan-dim:rgba(0,216,255,0.35);
+    --amber:#ff7a3d;
+    --gold:#ffc85c;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    overflow-x:hidden;
+    line-height:1.5;
+  }
+  ::selection{background:var(--cyan-dim);color:#fff;}
+
+  a{color:inherit;text-decoration:none;}
+
+  /* subtle grid texture */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:48px 48px;
+    pointer-events:none;
+    z-index:0;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 75%);
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 5vw;
+    background:rgba(9,12,18,0.55);
+    backdrop-filter:blur(16px) saturate(140%);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);
+    border-bottom:1px solid var(--glass-border);
+  }
+  .logo{
+    font-family:var(--font-mono);
+    font-size:14px;letter-spacing:0.5px;
+    color:var(--cyan);
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+  nav ul{list-style:none;display:flex;gap:36px;}
+  nav a{
+    font-size:13px;font-family:var(--font-mono);
+    color:var(--muted);letter-spacing:0.4px;
+    transition:color .25s;position:relative;
+  }
+  nav a:hover{color:var(--text);}
+  nav a::after{
+    content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;
+    background:var(--cyan);transition:width .25s;
+  }
+  nav a:hover::after{width:100%;}
+  .navlinks-mobile{display:none;}
+
+  .scroll-meter{
+    position:fixed;top:0;left:0;height:2px;
+    background:linear-gradient(90deg,var(--cyan),var(--amber));
+    z-index:200;width:0%;
+    box-shadow:0 0 8px var(--cyan);
+  }
+
+  /* ---------- HERO ---------- */
+  #hero-canvas{
+    position:fixed;top:0;left:0;width:100%;height:100vh;z-index:0;
+  }
+  .hero{
+    position:relative;min-height:100vh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:0 6vw;z-index:1;
+  }
+  .hero-eyebrow{
+    font-family:var(--font-mono);font-size:12.5px;color:var(--cyan);
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:22px;
+    display:flex;align-items:center;gap:10px;opacity:0;
+    animation:fadeUp .9s .2s forwards;
+  }
+  .hero-eyebrow::before{content:"";width:28px;height:1px;background:var(--cyan);}
+  .hero h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2.6rem, 6.4vw, 5.6rem);
+    line-height:1.03;
+    max-width:16ch;
+    opacity:0;animation:fadeUp .9s .35s forwards;
+  }
+  .hero h1 span{
+    background:linear-gradient(100deg, var(--cyan), var(--amber) 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lede{
+    margin-top:26px;max-width:46ch;color:var(--muted);
+    font-size:clamp(1rem,1.6vw,1.2rem);
+    opacity:0;animation:fadeUp .9s .5s forwards;
+  }
+  .hero-ctas{margin-top:42px;display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp .9s .65s forwards;}
+  .btn{
+    font-family:var(--font-mono);font-size:13px;letter-spacing:0.4px;
+    padding:14px 26px;border-radius:2px;
+    display:inline-flex;align-items:center;gap:10px;
+    transition:all .25s;cursor:pointer;
+  }
+  .btn-primary{
+    background:var(--cyan);color:#04121a;font-weight:600;
+    box-shadow:0 0 24px rgba(0,216,255,0.25);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(0,216,255,0.4);}
+  .btn-ghost{
+    border:1px solid var(--glass-border);color:var(--text);
+    background:var(--surface);backdrop-filter:blur(10px);
+  }
+  .btn-ghost:hover{border-color:var(--cyan-dim);background:var(--surface-strong);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+  .scroll-cue{
+    position:absolute;bottom:38px;left:6vw;
+    font-family:var(--font-mono);font-size:11px;color:var(--muted);
+    display:flex;align-items:center;gap:10px;
+  }
+  .scroll-cue .line{width:1px;height:34px;background:linear-gradient(var(--cyan),transparent);animation:scrollline 1.8s infinite;}
+  @keyframes scrollline{0%{opacity:1;}100%{opacity:0;transform:scaleY(1.4);}}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{position:relative;z-index:1;padding:120px 6vw;}
+  .section-head{max-width:640px;margin-bottom:64px;}
+  .eyebrow{
+    font-family:var(--font-mono);font-size:12px;color:var(--amber);
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:20px;height:1px;background:var(--amber);}
+  .section-head h2{
+    font-family:var(--font-display);font-weight:600;
+    font-size:clamp(1.9rem,3.4vw,2.9rem);
+  }
+  .section-head p{color:var(--muted);margin-top:16px;font-size:1.02rem;max-width:56ch;}
+
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.16,.8,.3,1), transform .8s cubic-bezier(.16,.8,.3,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- STAT STRIP ---------- */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--glass-border);
+    border-bottom:1px solid var(--glass-border);
+    padding:0;
+  }
+  .stat{
+    padding:34px 6vw;border-right:1px solid var(--glass-border);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{
+    font-family:var(--font-mono);font-size:clamp(1.6rem,2.6vw,2.4rem);
+    color:var(--cyan);font-weight:500;
+  }
+  .stat .label{color:var(--muted);font-size:12.5px;margin-top:6px;letter-spacing:0.3px;}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .about-card{
+    background:var(--surface);border:1px solid var(--glass-border);
+    border-radius:4px;padding:30px 32px;backdrop-filter:blur(14px);
+  }
+  .about-card + .about-card{margin-top:20px;}
+  .about-card h3{font-family:var(--font-display);font-size:1.1rem;margin-bottom:8px;font-weight:600;}
+  .about-card .tag{font-family:var(--font-mono);font-size:11px;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;display:block;}
+  .about-card p{color:var(--muted);font-size:0.95rem;}
+  .about-copy p{color:var(--muted);font-size:1.02rem;margin-bottom:18px;}
+  .about-copy strong{color:var(--text);font-weight:600;}
+  .highlight-badge{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--font-mono);font-size:12px;color:var(--gold);
+    border:1px solid rgba(255,200,92,0.3);background:rgba(255,200,92,0.06);
+    padding:8px 14px;border-radius:20px;margin-top:6px;
+  }
+
+  /* ---------- PROJECT CARDS ---------- */
+  .project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .project-card{
+    background:linear-gradient(160deg, var(--surface), rgba(255,255,255,0.015));
+    border:1px solid var(--glass-border);border-radius:6px;
+    padding:32px 28px;position:relative;overflow:hidden;
+    transition:transform .35s cubic-bezier(.16,.8,.3,1), border-color .35s;
+  }
+  .project-card:hover{transform:translateY(-6px);border-color:var(--cyan-dim);}
+  .project-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--cyan),var(--amber));
+    transform:scaleX(0);transform-origin:left;transition:transform .4s;
+  }
+  .project-card:hover::before{transform:scaleX(1);}
+  .project-index{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:1px;}
+  .project-card h3{font-family:var(--font-display);font-size:1.28rem;margin:14px 0 12px;font-weight:600;}
+  .project-card p{color:var(--muted);font-size:0.93rem;margin-bottom:8px;}
+  .project-card .spec-label{color:var(--cyan);font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.5px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .chip{
+    font-family:var(--font-mono);font-size:10.5px;color:var(--muted);
+    border:1px solid var(--glass-border);padding:5px 10px;border-radius:20px;
+  }
+  .rd-list{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .rd-item{border-left:2px solid var(--cyan-dim);padding-left:18px;}
+  .rd-item h4{font-family:var(--font-display);font-size:1rem;margin-bottom:6px;font-weight:600;}
+  .rd-item p{color:var(--muted);font-size:0.92rem;}
+
+  /* ---------- GLASS SLIDER ---------- */
+  .slider-wrap{position:relative;}
+  .slider-controls{display:flex;gap:12px;position:absolute;right:0;top:-84px;}
+  .slider-btn{
+    width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--glass-border);background:var(--surface);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    backdrop-filter:blur(10px);transition:all .2s;color:var(--text);
+  }
+  .slider-btn:hover{border-color:var(--cyan);background:var(--surface-strong);}
+  .slider-track{
+    display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding-bottom:24px;
+    scrollbar-width:none;
+  }
+  .slider-track::-webkit-scrollbar{display:none;}
+  .slide-card{
+    flex:0 0 340px;scroll-snap-align:start;
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--glass-border);
+    border-radius:8px;padding:28px 26px;
+    backdrop-filter:blur(18px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px) saturate(160%);
+    position:relative;
+  }
+  .slide-card .rank{
+    display:inline-block;font-family:var(--font-mono);font-size:11px;
+    padding:4px 10px;border-radius:20px;margin-bottom:16px;letter-spacing:0.4px;
+  }
+  .rank.gold{background:rgba(255,200,92,0.12);color:var(--gold);border:1px solid rgba(255,200,92,0.3);}
+  .rank.silver{background:rgba(200,210,220,0.1);color:#c9d4de;border:1px solid rgba(200,210,220,0.25);}
+  .rank.bronze{background:rgba(255,122,61,0.1);color:var(--amber);border:1px solid rgba(255,122,61,0.28);}
+  .rank.neutral{background:var(--surface);color:var(--muted);border:1px solid var(--glass-border);}
+  .slide-card h3{font-family:var(--font-display);font-size:1.15rem;margin-bottom:10px;font-weight:600;}
+  .slide-card p{color:var(--muted);font-size:0.9rem;}
+  .slide-card .meta{margin-top:16px;font-family:var(--font-mono);font-size:11px;color:var(--muted);border-top:1px solid var(--glass-border);padding-top:12px;}
+
+  /* ---------- LEADERSHIP ---------- */
+  .lead-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+  .lead-card{
+    background:var(--surface);border:1px solid var(--glass-border);
+    border-radius:6px;padding:28px;
+  }
+  .lead-card .role{font-family:var(--font-mono);color:var(--cyan);font-size:11px;letter-spacing:1px;text-transform:uppercase;}
+  .lead-card h3{font-family:var(--font-display);font-size:1.1rem;margin:10px 0 8px;font-weight:600;}
+  .lead-card p{color:var(--muted);font-size:0.92rem;}
+
+  /* ---------- CREATIVE / ATHLETIC ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .split-card{
+    border:1px solid var(--glass-border);border-radius:6px;
+    padding:36px 32px;background:var(--surface);position:relative;overflow:hidden;
+  }
+  .split-card h3{font-family:var(--font-display);font-size:1.3rem;margin-bottom:12px;font-weight:600;}
+  .split-card p{color:var(--muted);font-size:0.95rem;}
+  .split-card .glyph{
+    position:absolute;right:20px;bottom:10px;font-size:5.5rem;
+    opacity:0.06;font-family:var(--font-display);font-weight:700;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--glass-border);
+    padding:70px 6vw 40px;position:relative;z-index:1;
+  }
+  .footer-top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px;}
+  .footer-top h2{
+    font-family:var(--font-display);font-weight:600;
+    font-size:clamp(1.8rem,3.6vw,3rem);max-width:14ch;
+  }
+  .footer-links{display:flex;gap:22px;flex-wrap:wrap;}
+  .footer-links a{
+    font-family:var(--font-mono);font-size:13px;color:var(--muted);
+    border:1px solid var(--glass-border);padding:12px 20px;border-radius:2px;
+    transition:all .2s;
+  }
+  .footer-links a:hover{color:var(--cyan);border-color:var(--cyan-dim);}
+  .footer-bottom{
+    margin-top:60px;padding-top:24px;border-top:1px solid var(--glass-border);
+    display:flex;justify-content:space-between;color:var(--muted);
+    font-family:var(--font-mono);font-size:11.5px;flex-wrap:wrap;gap:10px;
+  }
+  .easter-egg{cursor:default;}
+  .easter-egg:hover{color:var(--amber);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    nav ul{display:none;}
+    .about-grid,.project-grid,.rd-list,.lead-grid,.split{grid-template-columns:1fr;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .stat{border-bottom:1px solid var(--glass-border);}
+    section{padding:90px 6vw;}
+    .slider-controls{top:-64px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-meter" id="scrollMeter"></div>
+
+<header>
+  <div class="logo"><span class="dot"></span>ASHRITH.PUPPALA</div>
+  <nav>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#hackathons">Hackathons</a></li>
+      <li><a href="#leadership">Leadership</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<canvas id="hero-canvas"></canvas>
+
+<section class="hero">
+  <div class="hero-eyebrow">ECE Student · PES University · Bengaluru</div>
+  <h1>Engineering sensors that <span>see the world</span> before it breaks.</h1>
+  <p class="lede">I build hardware that fuses ToF, IMU and GPS data into real-world signal — and the ML systems that make sense of it. Global hackathon finalist, 8-hour CTF finisher, occasional painter.</p>
+  <div class="hero-ctas">
+    <a href="#work" class="btn btn-primary">View Projects ↓</a>
+    <a href="#" class="btn btn-ghost">Download Résumé (PDF)</a>
+  </div>
+  <div class="scroll-cue"><div class="line"></div>SCROLL</div>
+</section>
+
+<section class="stats reveal">
+  <div class="stat">
+    <div class="num">98.2%</div>
+    <div class="label">ISC Science Stream Topper — SJBHS</div>
+  </div>
+  <div class="stat">
+    <div class="num">03</div>
+    <div class="label">Podium Finishes — UNESCO / Syzygy / ML Hunt</div>
+  </div>
+  <div class="stat">
+    <div class="num">02</div>
+    <div class="label">Festivals Directed — Transcendence & Phenomenon</div>
+  </div>
+  <div class="stat">
+    <div class="num">08 HR</div>
+    <div class="label">CTF Smash and Crack — Completed</div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-head reveal">
+    <div class="eyebrow">Foundation</div>
+    <h2>Trained in circuits, tuned for competition.</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div class="about-copy">
+      <p><strong>Ashrith Puppala</strong> is an Electronics and Communication Engineering student at <strong>PES University</strong>, Bengaluru — working across hardware sensor fusion, machine learning integration, and applied environmental research.</p>
+      <p>Before university, he topped the <strong>ISC Science Stream</strong> at St. Joseph's Boys' High School with a <strong>98.2%</strong> board score. That same precision now shows up in multi-sensor systems that geotag potholes in real time and piezoelectric rigs that turn footsteps into usable current.</p>
+      <p>Off the breadboard: acrylic painter with work shown in public exhibitions, state-level badminton runner-up, and — by popular household vote — full-time favourite person of a dog named <strong>Bruno</strong>.</p>
+      <div class="highlight-badge">🐾 Bruno approves this portfolio</div>
+    </div>
+    <div>
+      <div class="about-card">
+        <span class="tag">Undergraduate</span>
+        <h3>B.Tech, Electronics & Communication Engineering</h3>
+        <p>PES University, Bengaluru</p>
+      </div>
+      <div class="about-card">
+        <span class="tag">Prior Education</span>
+        <h3>St. Joseph's Boys' High School</h3>
+        <p>ISC Science Stream Topper — 98.2%</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="section-head reveal">
+    <div class="eyebrow">Engineering &amp; R&amp;D</div>
+    <h2>Flagship builds.</h2>
+    <p>Hardware-first projects, from geospatial road scanning to clean-energy harvesting.</p>
+  </div>
+
+  <div class="project-grid reveal">
+    <div class="project-card">
+      <div class="project-index">HW / 01</div>
+      <h3>The Pothole Cartographer</h3>
+      <p>A semi-autonomous scout that fuses Time-of-Flight sensors, MPU6050 IMUs, and GPS to scan, process, and geotag road defects in real time.</p>
+      <div class="chip-row">
+        <span class="chip">ToF Sensing</span>
+        <span class="chip">MPU6050 IMU</span>
+        <span class="chip">GPS Geotagging</span>
+        <span class="chip">Sensor Fusion</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-index">HW / 02</div>
+      <h3>Footstep Power Generator</h3>
+      <p>A piezoelectric energy harvester that converts foot pressure into usable electrical current — demonstrated live to the Governor of Karnataka.</p>
+      <div class="chip-row">
+        <span class="chip">Piezoelectric</span>
+        <span class="chip">Kinetic Harvesting</span>
+        <span class="chip">Clean Energy</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-index">R&D / 03</div>
+      <h3>Microplastic Filtration</h3>
+      <p>Ongoing research into engineering solutions for filtering microplastics out of delicate aquatic ecosystems.</p>
+      <div class="chip-row">
+        <span class="chip">Applied Research</span>
+        <span class="chip">Environmental Eng.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-list reveal">
+    <div class="rd-item">
+      <h4>NLP &amp; LLM Systems</h4>
+      <p>Programmatic workflows for sentiment analysis and direct integration with large language model systems.</p>
+    </div>
+    <div class="rd-item">
+      <h4>Digital Image Processing</h4>
+      <p>Completed the Learning Path 4.0 practical training track with IEEE RAS PESU at Robofest 5.0.</p>
+    </div>
+  </div>
+</section>
+
+<section id="hackathons">
+  <div class="section-head reveal">
+    <div class="eyebrow">Competition Record</div>
+    <h2>The hackathon arena.</h2>
+    <p>Podium finishes, national sprints, and one very long CTF night. Drag to explore.</p>
+  </div>
+  <div class="slider-wrap reveal">
+    <div class="slider-controls">
+      <div class="slider-btn" id="sliderPrev">←</div>
+      <div class="slider-btn" id="sliderNext">→</div>
+    </div>
+    <div class="slider-track" id="sliderTrack">
+
+      <div class="slide-card">
+        <span class="rank gold">Global Finalist · 2025</span>
+        <h3>UNESCO Youth Hackathon</h3>
+        <p>Co-developed <em>TruthVerse</em>, a digital safety platform built to combat misinformation and digital fraud worldwide.</p>
+        <div class="meta">Team Build · Digital Safety</div>
+      </div>
+
+      <div class="slide-card">
+        <span class="rank silver">2nd Place · 2025</span>
+        <h3>Syzygy 2.0 Space-Tech Hackathon</h3>
+        <p>Built a real-time space debris tracking platform under team "Triple A Battery" at Equinox, The Space Club PESU.</p>
+        <div class="meta">Team: Triple A Battery</div>
+      </div>
+
+      <div class="slide-card">
+        <span class="rank bronze">3rd Place · 2025</span>
+        <h3>ML Hunt: Neural Hive</h3>
+        <p>Designed high-accuracy predictive models during Retronomia (Maaya 2025) at the PESU Electronic City Campus.</p>
+        <div class="meta">Machine Learning Sprint</div>
+      </div>
+
+      <div class="slide-card">
+        <span class="rank neutral">2026</span>
+        <h3>Department of ECE Hackathon</h3>
+        <p>Rapid prototyping sprint on "Powering Real Life: Smart Solutions Using Electrical Machines."</p>
+        <div class="meta">Prototyping Sprint</div>
+      </div>
+
+      <div class="slide-card">
+        <span class="rank neutral">2026</span>
+        <h3>JOEL Roadshow</h3>
+        <p>Selected to present functional hardware paradigms at the Joy of Engineering Lab exhibition, ECE Dept, PES University RR Campus.</p>
+        <div class="meta">Hardware Exhibition</div>
+      </div>
+
+      <div class="slide-card">
+        <span class="rank neutral">2025</span>
+        <h3>The Latlong Hackathon</h3>
+        <p>"Maps Reimagined" — used geospatial intelligence to redefine spatial data applications.</p>
+        <div class="meta">Geospatial Intelligence</div>
+      </div>
+
+      <div class="slide-card">
+        <span class="rank neutral">2025</span>
+        <h3>CodeXverse Hackathon</h3>
+        <p>Competed under team "TeamPhenomenon" in the development track organized by Elenxia.</p>
+        <div class="meta">Team: TeamPhenomenon</div>
+      </div>
+
+      <div class="slide-card">
+        <span class="rank neutral">2025</span>
+        <h3>Kodikon 5.0</h3>
+        <p>24-hour National Level Hackathon hosted by The Embrione, CSE Department, PES University.</p>
+        <div class="meta">24-Hour National Hackathon</div>
+      </div>
+
+      <div class="slide-card">
+        <span class="rank neutral">2025</span>
+        <h3>CTF Smash and Crack</h3>
+        <p>An 8-hour cybersecurity Capture The Flag challenge hosted by the Alcoding Club, CSE Department.</p>
+        <div class="meta">8-Hour Cybersecurity CTF</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="leadership">
+  <div class="section-head reveal">
+    <div class="eyebrow">Strategy &amp; Diplomacy</div>
+    <h2>Off the bench, on the floor.</h2>
+    <p>Running festivals and holding the line in policy rooms.</p>
+  </div>
+  <div class="lead-grid reveal">
+    <div class="lead-card">
+      <span class="role">Head of Events</span>
+      <h3>Transcendence 2024</h3>
+      <p>Directed operations, budgeting, and event curation for the International Science &amp; Tech Festival.</p>
+    </div>
+    <div class="lead-card">
+      <span class="role">Head of Events</span>
+      <h3>Phenomenon 2024</h3>
+      <p>Managed volunteer teams, logistics, and scheduling for the inter-school festival.</p>
+    </div>
+    <div class="lead-card">
+      <span class="role">Commendable Delegate</span>
+      <h3>SJBHS Model UN</h3>
+      <p>Awarded individual honors for competitive debate, policy strategy, and multilateral resolution drafting.</p>
+    </div>
+    <div class="lead-card">
+      <span class="role">Delegate</span>
+      <h3>Diplomat Wars, 6th Edition</h3>
+      <p>Public policy and diplomacy assembly hosted by the PES MUN Society.</p>
+    </div>
+  </div>
+</section>
+
+<section id="creative">
+  <div class="section-head reveal">
+    <div class="eyebrow">Beyond the Bench</div>
+    <h2>The other 20%.</h2>
+  </div>
+  <div class="split reveal">
+    <div class="split-card">
+      <h3>Fine Arts</h3>
+      <p>Acrylic painter with original work selected for public art exhibitions.</p>
+      <div class="glyph">🎨</div>
+    </div>
+    <div class="split-card">
+      <h3>Competitive Badminton</h3>
+      <p>2nd place at the state-level CISCE badminton tournament.</p>
+      <div class="glyph">🏸</div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="footer-top reveal">
+    <h2>Let's build something that actually senses the world.</h2>
+    <div class="footer-links">
+      <a href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="#" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="mailto:hello@ashrithpuppala.com">Email ↗</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Ashrith Puppala. Bengaluru, Karnataka.</span>
+    <span class="easter-egg">Built with sensors, caffeine &amp; Bruno's supervision 🐾</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------- SCROLL PROGRESS METER ---------- */
+const meter = document.getElementById('scrollMeter');
+function updateMeter(){
+  const h = document.documentElement;
+  const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  meter.style.width = scrolled + '%';
+}
+document.addEventListener('scroll', updateMeter, {passive:true});
+
+/* ---------- REVEAL ON SCROLL ---------- */
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+},{threshold:0.15});
+reveals.forEach(r=>io.observe(r));
+
+/* ---------- GLASS SLIDER CONTROLS ---------- */
+const track = document.getElementById('sliderTrack');
+document.getElementById('sliderNext').onclick = ()=> track.scrollBy({left:360, behavior:'smooth'});
+document.getElementById('sliderPrev').onclick = ()=> track.scrollBy({left:-360, behavior:'smooth'});
+let isDown=false, startX, scrollLeft;
+track.addEventListener('mousedown',(e)=>{isDown=true; startX=e.pageX-track.offsetLeft; scrollLeft=track.scrollLeft; track.style.cursor='grabbing';});
+track.addEventListener('mouseleave',()=>{isDown=false; track.style.cursor='grab';});
+track.addEventListener('mouseup',()=>{isDown=false; track.style.cursor='grab';});
+track.addEventListener('mousemove',(e)=>{
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - track.offsetLeft;
+  track.scrollLeft = scrollLeft - (x-startX)*1.4;
+});
+
+/* ---------- THREE.JS SENSOR-FUSION HERO ---------- */
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.z = 9;
+
+  // Wireframe icosahedron core
+  const coreGeo = new THREE.IcosahedronGeometry(2.6, 1);
+  const coreMat = new THREE.MeshBasicMaterial({color:0x00d8ff, wireframe:true, transparent:true, opacity:0.28});
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  scene.add(core);
+
+  const coreGeo2 = new THREE.IcosahedronGeometry(3.4, 0);
+  const coreMat2 = new THREE.MeshBasicMaterial({color:0xff7a3d, wireframe:true, transparent:true, opacity:0.12});
+  const core2 = new THREE.Mesh(coreGeo2, coreMat2);
+  scene.add(core2);
+
+  // Sensor node particles + connecting lines (network / sensor-fusion motif)
+  const NODE_COUNT = 70;
+  const nodePositions = [];
+  const nodesGeo = new THREE.BufferGeometry();
+  const posArray = new Float32Array(NODE_COUNT*3);
+  for(let i=0;i<NODE_COUNT;i++){
+    const r = 4.2 + Math.random()*2.6;
+    const theta = Math.random()*Math.PI*2;
+    const phi = Math.acos((Math.random()*2)-1);
+    const x = r*Math.sin(phi)*Math.cos(theta);
+    const y = r*Math.sin(phi)*Math.sin(theta);
+    const z = r*Math.cos(phi);
+    posArray[i*3]=x; posArray[i*3+1]=y; posArray[i*3+2]=z;
+    nodePositions.push(new THREE.Vector3(x,y,z));
+  }
+  nodesGeo.setAttribute('position', new THREE.BufferAttribute(posArray,3));
+  const nodesMat = new THREE.PointsMaterial({color:0x00d8ff, size:0.06, transparent:true, opacity:0.85});
+  const nodes = new THREE.Points(nodesGeo, nodesMat);
+  scene.add(nodes);
+
+  // connecting lines between nearby nodes
+  const lineVerts = [];
+  for(let i=0;i<NODE_COUNT;i++){
+    for(let j=i+1;j<NODE_COUNT;j++){
+      if(nodePositions[i].distanceTo(nodePositions[j]) < 2.1){
+        lineVerts.push(nodePositions[i].x, nodePositions[i].y, nodePositions[i].z);
+        lineVerts.push(nodePositions[j].x, nodePositions[j].y, nodePositions[j].z);
+      }
+    }
+  }
+  const lineGeo = new THREE.BufferGeometry();
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lineVerts), 3));
+  const lineMat = new THREE.LineBasicMaterial({color:0x00d8ff, transparent:true, opacity:0.08});
+  const lines = new THREE.LineSegments(lineGeo, lineMat);
+  scene.add(lines);
+
+  const group = new THREE.Group();
+  group.add(core, core2, nodes, lines);
+  scene.add(group);
+
+  let mouseX = 0, mouseY = 0;
+  window.addEventListener('mousemove', (e)=>{
+    mouseX = (e.clientX / window.innerWidth - 0.5);
+    mouseY = (e.clientY / window.innerHeight - 0.5);
+  });
+
+  window.addEventListener('resize', ()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  let scrollY = 0;
+  window.addEventListener('scroll', ()=>{ scrollY = window.scrollY; }, {passive:true});
+
+  let visible = true;
+  document.addEventListener('visibilitychange', ()=>{ visible = !document.hidden; });
+
+  function animate(){
+    requestAnimationFrame(animate);
+    if(!visible) return;
+    if(!reduceMotion){
+      group.rotation.y += 0.0016;
+      group.rotation.x += 0.0006;
+      core.rotation.y -= 0.002;
+      core2.rotation.y += 0.001;
+      group.rotation.y += (mouseX*0.4 - group.rotation.y) * 0.02;
+      group.rotation.x += (mouseY*0.25 - group.rotation.x) * 0.02;
+    }
+    group.position.y = -scrollY*0.0016;
+    camera.position.z = 9 - Math.min(scrollY*0.001, 2.2);
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
